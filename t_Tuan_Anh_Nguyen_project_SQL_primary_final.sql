@@ -1,4 +1,3 @@
-
 CREATE TABLE t_Tuan_Anh_Nguyen_project_SQL_primary_final AS
 SELECT
 	cpay.payroll_year AS rok,
@@ -18,11 +17,3 @@ LEFT JOIN czechia_price_category AS cpc
 LEFT JOIN czechia_payroll_industry_branch AS cpib 
 	ON cpay.industry_branch_code  = cpib.code 
 WHERE cpay.value_type_code = '5958';
-
-SELECT *
-FROM t_Tuan_Anh_Nguyen_project_SQL_primary_final;
-
-DROP TABLE t_Tuan_Anh_Nguyen_project_SQL_primary_final;
-
-SELECT *
-FROM czechia_price_category AS cpc 

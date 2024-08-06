@@ -1,7 +1,3 @@
--- Výzkumná otázka č. 3
--- 3. Která kategorie potravin zdražuje nejpomaleji (je u ní nejnižší percentuální meziroční nárůst)?
-
--- nejnizsi procentualni zmena _FINALE
 WITH nejnizsi AS (
 SELECT
 	rok,
@@ -21,10 +17,15 @@ SELECT
 	procentualni_zmena
 FROM nejnizsi
 WHERE procentualni_zmena IN (
-								SELECT 
-									min(procentualni_zmena)
-								FROM nejnizsi
-								WHERE procentualni_zmena > 0);
+							SELECT 
+								min(procentualni_zmena)
+							FROM nejnizsi
+							WHERE procentualni_zmena > 0)
+or procentualni_zmena IN (
+							SELECT
+								max(procentualni_zmena)
+							FROM nejnizsi
+							WHERE procentualni_zmena < 0);
 
 
 
@@ -43,21 +44,26 @@ GROUP BY rok, kod_produktu
 ORDER BY kod_produktu, rok
 ),
 minimum AS (
-		SELECT
-			kod_produktu,
-			kategorie_potravin,
-			round(avg(procentualni_zmena),2) AS prumerna_procentualni_zmena
-		FROM zmena
-		GROUP BY kategorie_potravin
-		)
-				SELECT
-					kod_produktu,
-					kategorie_potravin,
-					prumerna_procentualni_zmena
-				FROM minimum
-				WHERE prumerna_procentualni_zmena IN (
-											SELECT 
-												min(prumerna_procentualni_zmena)
-											FROM minimum
-											WHERE prumerna_procentualni_zmena > 0);
-
+SELECT
+	rok,
+	kod_produktu,
+	kategorie_potravin,
+	round(avg(procentualni_zmena),2) AS prumerna_procentualni_zmena
+FROM zmena
+GROUP BY kategorie_potravin)
+SELECT
+	rok,
+	kod_produktu,
+	kategorie_potravin,
+	prumerna_procentualni_zmena
+FROM minimum
+WHERE prumerna_procentualni_zmena IN (
+									SELECT 
+										min(prumerna_procentualni_zmena)
+									FROM minimum
+									WHERE prumerna_procentualni_zmena > 0)
+or prumerna_procentualni_zmena IN (
+									SELECT 
+										max(prumerna_procentualni_zmena)
+									FROM minimum
+									WHERE prumerna_procentualni_zmena < 0);
